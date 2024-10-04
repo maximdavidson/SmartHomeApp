@@ -1,5 +1,11 @@
+import { useThemeStore } from '@/shared/store/themeStore';
 import styles from './style.module.css';
 
 export const Footer = () => {
-  return <div className={styles.container}></div>;
+  const { theme } = useThemeStore();
+  return (
+    <div
+      className={`${styles.container} ${theme === 'dark' ? styles.darkContainer : styles.lightContainer}`}
+    ></div>
+  );
 };

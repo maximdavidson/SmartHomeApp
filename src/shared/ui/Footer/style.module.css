@@ -1,5 +1,4 @@
 .container {
-  background: rgba(44, 43, 43, 1);
   width: 100%;
   height: 40px;
   position: fixed;
@@ -7,4 +6,12 @@
   left: 0;
   border-top-left-radius: 30px;
   border-top-right-radius: 30px;
+}
+
+.darkContainer {
+  background: rgba(44, 43, 43, 1);
+}
+
+.lightContainer {
+  background: rgba(240, 240, 240, 1);
 }

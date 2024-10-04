@@ -19,7 +19,6 @@
   cursor: pointer;
   width: 169px;
   height: 139px;
-  background: rgba(44, 43, 43, 1);
   padding-left: 20px;
   padding-top: 20px;
   padding-right: 10px;
@@ -27,6 +26,13 @@
   border-radius: 20px;
 }
 
+.darkCard {
+  background: rgba(44, 43, 43, 1);
+}
+
+.lightCard {
+  background: rgba(240, 240, 240, 1);
+}
 .controlImage {
   padding-top: 15px;
 }

@@ -1,11 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&display=swap');
 
+:root {
+  --background-color-dark: rgba(7, 1, 1, 1);
+  --text-color-dark: rgb(236, 236, 236);
+
+  --background-color-light: rgba(255, 255, 255, 1);
+  --text-color-light: rgba(0, 0, 0, 1);
+}
+
 body {
   margin: 0;
   font-family: 'Julius Sans One', sans-serif;
   font-weight: 400;
   font-style: normal;
-  background: rgba(7, 1, 1, 1);
-  color: rgba(255, 255, 255, 1);
+  background-color: var(--background-color-dark); /* По умолчанию темная тема */
+  color: var(--text-color-dark);
   text-transform: uppercase;
+  transition:
+    background-color 0.3s,
+    color 0.3s; /* Анимация плавного изменения темы */
 }
