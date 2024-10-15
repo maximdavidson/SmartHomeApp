@@ -57,3 +57,49 @@
   top: 16px;
   right: 16px;
 }
+
+@media (max-width: 1275px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 930px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 70px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    margin-left: 85px;
+    margin-right: 85px;
+  }
+
+  .grid {
+    grid-gap: 20px;
+  }
+}
+
+@media (max-width: 391px) {
+  .container {
+    margin-left: 105px;
+    margin-right: 105px;
+  }
+
+  .card {
+    width: 139px;
+    height: 110px;
+  }
+
+  .grid {
+    grid-gap: 20px;
+  }
+
+  .title {
+    font-family: 'Julius Sans One', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+  }
+}

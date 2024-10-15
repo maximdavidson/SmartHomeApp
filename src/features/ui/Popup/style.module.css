@@ -1,0 +1,54 @@
+.popupOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popupContent {
+  width: 250px;
+  height: 220px;
+  padding: 20px;
+  border-radius: 20px;
+  text-align: center;
+  position: relative;
+  overflow: auto;
+}
+
+.darkPopup {
+  background: rgba(44, 43, 43, 1);
+  color: white;
+}
+
+.lightPopup {
+  background: rgba(240, 240, 240, 1);
+  color: black;
+}
+
+.popupImage {
+  margin-top: 10px;
+}
+
+.popupTag {
+  margin-top: 10px;
+}
+
+.closeButton {
+  margin-top: 15px;
+  background: #a2150b;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.closeButton:hover {
+  background: #bc1a0e;
+}

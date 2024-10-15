@@ -43,3 +43,15 @@
 .btn:hover {
   opacity: 70%;
 }
+
+@media (max-width: 480px) {
+  .container {
+    margin-left: 25px;
+    margin-right: 25px;
+  }
+
+  .title {
+    font-size: 20px;
+    font-weight: 400;
+  }
+}
