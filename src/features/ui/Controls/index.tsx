@@ -2,84 +2,56 @@
 import { useState } from 'react';
 import { AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { controls as originalControls } from '@/shared/mocks/ControlsData';
 import { useThemeStore } from '@/shared/store/themeStore';
 import { Popup } from '../Popup';
 import styles from './style.module.css';
+import { MqttTopic, mqttTopics } from '@/shared/mocks/ControlsData';
+import { useMqtt } from '@/shared/utils/mqttDataLoad';
 
 export const Controls = () => {
   const { theme } = useThemeStore();
-  const [selectedControl, setSelectedControl] = useState(null);
+  const [selectedTopic, setSelectedTopic] = useState<MqttTopic | null>(null);
 
-  const [controls, setControls] = useState(
-    originalControls.map((control) => ({
-      ...control,
-      isAlarm: control.id === 'fire-and-smoke' ? false : undefined,
-      tags:
-        control.humidity && control.humidity > 50
-          ? '/assets/EllipsRed.png'
-          : '/assets/EllipsGreen.png',
-    })),
-  );
+  const { messages, isConnected } = useMqtt(mqttTopics); // Получаем данные MQTT
 
-  const handleCardClick = (control: any) => {
-    setSelectedControl(control);
+  const handleCardClick = (topic: MqttTopic) => {
+    setSelectedTopic(topic);
   };
 
   const handleClosePopup = () => {
-    setSelectedControl(null);
-  };
-
-  const toggleAlarm = (controlId: string) => {
-    setControls((prevControls) =>
-      prevControls.map((control) => {
-        if (control.id === controlId && !control.isAlarm) {
-          return {
-            ...control,
-            isAlarm: true,
-            tags: '/assets/EllipsRed.png',
-          };
-        }
-        return control;
-      }),
-    );
+    setSelectedTopic(null);
   };
 
   return (
     <div className={styles.container}>
       <div className={styles.grid}>
-        {controls.map((control) => (
+        {mqttTopics.map((topic) => (
           <div
-            key={control.id}
+            key={topic.sensorId}
             className={`${styles.card} ${theme === 'dark' ? styles.darkCard : styles.lightCard}`}
-            onClick={() => handleCardClick(control)}
+            onClick={() => handleCardClick(topic)}
           >
             <Image
               width={33}
               height={33}
-              src={control.imageUrl}
-              alt={control.title}
+              src={`/assets/${topic.sensorName}.png`}
+              alt={topic.sensorName}
               className={styles.controlImage}
             />
-            <h3>{control.title}</h3>
-            {control.tags && (
-              <Image
-                width={11}
-                height={11}
-                src={control.tags}
-                alt="tag"
-                className={styles.controlTag}
-              />
+            <h3>{topic.sensorName}</h3>
+            {/* Отображаем данные, полученные через MQTT */}
+            {messages[topic.sensorName] && (
+              <p>{`Data: ${messages[topic.sensorName]}`}</p>
             )}
+            {!isConnected && <p>Connecting...</p>}
           </div>
         ))}
       </div>
       <AnimatePresence>
-        {selectedControl && (
+        {selectedTopic && (
           <Popup
-            control={selectedControl}
+            control={selectedTopic}
             onClose={handleClosePopup}
-            toggleAlarm={toggleAlarm}
           />
         )}
       </AnimatePresence>

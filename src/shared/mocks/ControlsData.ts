@@ -1,66 +1,53 @@
-export interface Controls {
-  id: number;
-  title: string;
-  imageUrl: string;
-  tags?: string;
-  humidity?: number;
-  isAlarm?: boolean;
+export interface MqttTopic {
+  sensorName: string;
+  sensorId: number;
+  topics: string[];
 }
 
-export const controls = [
+export const mqttTopics: MqttTopic[] = [
   {
-    id: 'fire-and-smoke',
-    title: 'fire and smoke',
-    imageUrl: '/assets/Fire.png',
-    tags: '',
-    isAlarm: true,
+    sensorName: 'fire-and-smoke',
+    sensorId: 1,
+    topics: ['sensor/fire', 'sensor/smoke'],
   },
   {
-    id: 'moveme-nts',
-    title: 'moveme nts',
-    imageUrl: '/assets/Moveme.png',
+    sensorName: 'movements',
+    sensorId: 2,
+    topics: ['sensor/movement'],
   },
   {
-    id: 'home-protection',
-    title: 'home protection',
-    imageUrl: '/assets/Home.png',
-    tags: '/assets/EllipsGreen.png',
+    sensorName: 'home-protection',
+    sensorId: 3,
+    topics: ['sensor/security'],
   },
   {
-    id: 'fan',
-    title: 'fan',
-    imageUrl: '/assets/Fan.png',
-    tags: '/assets/EllipsGreen.png',
+    sensorName: 'fan',
+    sensorId: 4,
+    topics: ['sensor/fan'],
   },
   {
-    id: 'air-humidity',
-    title: 'air humidity',
-    imageUrl: '/assets/Humidity.png',
-    tags: '/assets/EllipsGreen.png',
-    humidity: 65,
+    sensorName: 'air-humidity',
+    sensorId: 5,
+    topics: ['sensor/humidity'],
   },
   {
-    id: 'shaking',
-    title: 'shaking',
-    imageUrl: '/assets/Shaking.png',
-    tags: '/assets/EllipsGreen.png',
+    sensorName: 'shaking',
+    sensorId: 6,
+    topics: ['sensor/shaking'],
   },
   {
-    id: 'charge',
-    title: 'charge',
-    imageUrl: '/assets/Charge.png',
-    tags: '/assets/EllipsGreen.png',
+    sensorName: 'charge',
+    sensorId: 7,
+    topics: ['sensor/charge'],
   },
   {
-    id: 'slant',
-    title: 'slant',
-    imageUrl: '/assets/Slant.png',
-    tags: '/assets/EllipsGreen.png',
+    sensorName: 'slant',
+    sensorId: 8,
+    topics: ['sensor/slant'],
   },
   {
-    id: 'noise',
-    title: 'noise',
-    imageUrl: '/assets/Noise.png',
-    tags: '/assets/EllipsGreen.png',
+    sensorName: 'noise',
+    sensorId: 9,
+    topics: ['sensor/noise'],
   },
 ];

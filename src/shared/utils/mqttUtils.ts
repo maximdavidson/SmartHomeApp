@@ -23,7 +23,6 @@ export const connectToMQTT = (
   });
 
   client.on('connect', () => {
-    console.log('Connected to MQTT broker');
     client.subscribe(topic, (err) => {
       if (err) {
         console.error('Subscription error:', err);
@@ -43,7 +42,6 @@ export const connectToMQTT = (
 
 export const disconnectFromMQTT = (client: MqttClient, onDisconnect: () => void) => {
   client.end(() => {
-    console.log('Disconnected from MQTT broker');
     onDisconnect();
   });
 };
