@@ -6,9 +6,10 @@ import styles from './style.module.css';
 interface PopupProps {
   control: any;
   onClose: () => void;
+  toggleAlarm: (controlId: string) => void;
 }
 
-export const Popup = ({ control, onClose }: PopupProps) => {
+export const Popup = ({ control, onClose, toggleAlarm }: PopupProps) => {
   const { theme } = useThemeStore();
 
   if (!control) return null;
@@ -33,7 +34,22 @@ export const Popup = ({ control, onClose }: PopupProps) => {
           alt={control.title}
           className={styles.popupImage}
         />
-        <p>ID: {control.id}</p>
+
+        {control.humidity !== undefined && (
+          <p className={styles.humidity}>
+            Humidity: <strong>{control.humidity}%</strong>
+          </p>
+        )}
+
+        {control.id === 'fire-and-smoke' && (
+          <button
+            onClick={() => toggleAlarm(control.id)}
+            className={styles.toggleAlarmButton}
+          >
+            Turn Off Alarm
+          </button>
+        )}
+
         <button onClick={onClose} className={styles.closeButton}>
           X
         </button>

@@ -3,6 +3,8 @@ export interface Controls {
   title: string;
   imageUrl: string;
   tags?: string;
+  humidity?: number;
+  isAlarm?: boolean;
 }
 
 export const controls = [
@@ -10,7 +12,8 @@ export const controls = [
     id: 'fire-and-smoke',
     title: 'fire and smoke',
     imageUrl: '/assets/Fire.png',
-    tags: '/assets/EllipsGreen.png',
+    tags: '',
+    isAlarm: true,
   },
   {
     id: 'moveme-nts',
@@ -34,6 +37,7 @@ export const controls = [
     title: 'air humidity',
     imageUrl: '/assets/Humidity.png',
     tags: '/assets/EllipsGreen.png',
+    humidity: 65,
   },
   {
     id: 'shaking',

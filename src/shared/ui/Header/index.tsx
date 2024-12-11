@@ -1,59 +1,74 @@
-'use client';
-
-import Image from 'next/image';
-import { useThemeStore } from '@/shared/store/themeStore';
-import styles from './style.module.css';
-
 import { useState } from 'react';
+import { MqttClient } from 'mqtt';
+import styles from './style.module.css';
+import { connectToMQTT, disconnectFromMQTT } from '@/shared/utils/mqttUtils';
 
 export const Header = () => {
-  const { theme, toggleTheme } = useThemeStore();
-  const [sensorData, setSensorData] = useState(null);
+  const [client, setClient] = useState<MqttClient | null>(null);
+  const [sensorData, setSensorData] = useState<Record<string, string>>({});
+  const [connected, setConnected] = useState(false);
 
-  const connectToRaspberry = async () => {
-    try {
-      const response = await fetch('http://192.168.1.1git >:5000/sensors');
-      if (!response.ok) {
-        throw new Error('Failed to connect to Raspberry Pi');
+  const handleConnect = () => {
+    connectToMQTT(
+      {
+        url: 'wss://soldier.cloudmqtt.com:11237',
+        username: 'root',
+        password: 'root',
+        topic: 'rootTopic/currentTopic',
+        onMessage: (topic, message) => {
+          console.log(`Message received on ${topic}: ${message}`);
+          setSensorData((prev) => ({
+            ...prev,
+            [topic]: message,
+          }));
+        },
+      },
+      (mqttClient) => {
+        setClient(mqttClient);
+        setConnected(true);
+      },
+      (error) => {
+        console.error('MQTT Connection Error:', error);
       }
-      const data = await response.json();
-      setSensorData(data);
-    } catch (error) {
-      console.error('Error connecting to Raspberry Pi:', error);
+    );
+  };
+
+  const handleDisconnect = () => {
+    if (client) {
+      disconnectFromMQTT(client, () => {
+        setClient(null);
+        setConnected(false);
+      });
     }
   };
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>smart home</h1>
+      <h1 className={styles.title}>Smart Home</h1>
       <div className={styles.management}>
-        <Image
-          src={
-            theme === 'dark'
-              ? '/assets/ThemeSwitchOff.png'
-              : '/assets/ThemeSwitchOn.png'
-          }
-          width={40}
-          height={38}
-          alt="Theme switcher"
-          className={styles.switch}
-          onClick={toggleTheme}
-        />
-        <button
-          className={`${styles.btn} ${theme === 'dark' ? styles.darkBtn : styles.lightBtn}`}
-          onClick={connectToRaspberry}
-        >
-          connect
-        </button>
-        {sensorData && (
-          <div className={styles.sensorData}>
-            {/* <p>Temperature: {sensorData.temperature}°C</p>
-            <p>Humidity: {sensorData.humidity}%</p>
-            <p>Motion Detected: {sensorData.motion_detected ? 'Yes' : 'No'}</p> */}
-          </div>
+        {!connected ? (
+          <button
+            className={`${styles.btn} ${styles.connectBtn}`}
+            onClick={handleConnect}
+          >
+            Connect
+          </button>
+        ) : (
+          <button
+            className={`${styles.btn} ${styles.disconnectBtn}`}
+            onClick={handleDisconnect}
+          >
+            Disconnect
+          </button>
         )}
+        <div className={styles.sensorData}>
+          {Object.entries(sensorData).map(([key, value]) => (
+            <p key={key}>
+              {key}: {value}
+            </p>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
-
