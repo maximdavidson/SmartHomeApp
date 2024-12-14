@@ -1,9 +1,9 @@
 import mqtt from 'mqtt';
 import { useEffect, useState } from 'react';
-import { MqttTopic } from '@/shared/mocks/ControlsData'; // Ваша структура данных
+import { MqttTopic } from '@/shared/mocks/ControlsData';
 
-const MQTT_BROKER_URL = 'wss://your-mqtt-broker-url:port'; // Замените на ваш URL
-const MQTT_CLIENT_ID = 'web-client-id'; // Уникальный идентификатор клиента
+const MQTT_BROKER_URL = 'ws://192.168.43.189:1883'; 
+const MQTT_CLIENT_ID = `web-client`;
 
 export const useMqtt = (topics: MqttTopic[]) => {
   const [messages, setMessages] = useState<{ [key: string]: string }>({});
@@ -13,20 +13,23 @@ export const useMqtt = (topics: MqttTopic[]) => {
     const client = mqtt.connect(MQTT_BROKER_URL, {
       clientId: MQTT_CLIENT_ID,
       clean: true,
+      username: 'admin',  // Указываем логин
+      password: 'admin',  // Указываем пароль
+      reconnectPeriod: 1000, // Период повторного подключения в миллисекундах
+    protocol: 'mqtt',
     });
 
     client.on('connect', () => {
-      console.log('Connected to MQTT Broker');
+      console.log('Подключено к MQTT брокеру');
       setIsConnected(true);
 
-      // Подписка на топики
-      topics.forEach(topic => {
-        topic.topics.forEach(subTopic => {
+      topics.forEach((topic) => {
+        topic.topics.forEach((subTopic) => {
           client.subscribe(subTopic, { qos: 1 }, (err) => {
             if (err) {
-              console.error(`Failed to subscribe to ${subTopic}`, err);
+              console.error(`Не удалось подписаться на ${subTopic}:`, err);
             } else {
-              console.log(`Subscribed to ${subTopic}`);
+              console.log(`Подписано на ${subTopic}`);
             }
           });
         });
@@ -40,16 +43,29 @@ export const useMqtt = (topics: MqttTopic[]) => {
           ...prevMessages,
           [topicName]: message.toString(),
         }));
+        console.log(`Сообщение получено на тему ${topic}: ${message.toString()}`);
       }
     });
 
     client.on('error', (err) => {
-      console.error('MQTT connection error:', err);
+      console.error('Ошибка подключения MQTT:', err);
+      setIsConnected(false);
+    });
+
+    client.on('close', () => {
+      console.log('MQTT соединение закрыто');
+      setIsConnected(false);
+    });
+
+    client.on('offline', () => {
+      console.warn('MQTT клиент оффлайн');
       setIsConnected(false);
     });
 
     return () => {
-      client.end(); // Закрытие подключения при размонтировании компонента
+      client.end(true, () => {
+        console.log('MQTT клиент отключен');
+      });
     };
   }, [topics]);
 

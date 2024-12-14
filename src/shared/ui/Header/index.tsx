@@ -11,9 +11,9 @@ export const Header = () => {
   const handleConnect = () => {
     connectToMQTT(
       {
-        url: 'wss://soldier.cloudmqtt.com:11237',
-        username: 'root',
-        password: 'root',
+        url: 'ws://192.168.43.189:1883', 
+        username: 'admin',
+        password: 'admin',
         topic: 'rootTopic/currentTopic',
         onMessage: (topic, message) => {
           console.log(`Message received on ${topic}: ${message}`);
